@@ -45,7 +45,7 @@ namespace wl {
         return -1;
       }
 
-      if (!interface[wl::interface_t::WLR_EXPORT_DMABUF]) {
+      if (!interface[wl::interface_t::WLR_SCREENCOPY]) {
         BOOST_LOG(error) << "Missing Wayland wire for wlr-export-dmabuf"sv;
         return -1;
       }
@@ -422,7 +422,7 @@ namespace platf {
       return {};
     }
 
-    if (!interface[wl::interface_t::WLR_EXPORT_DMABUF]) {
+    if (!interface[wl::interface_t::WLR_SCREENCOPY]) {
       BOOST_LOG(warning) << "Missing Wayland wire for wlr-export-dmabuf"sv;
       return {};
     }

@@ -50,13 +50,13 @@ namespace wl {
     dmabuf_t();
 
     void
-    listen(zwlr_export_dmabuf_manager_v1 *dmabuf_manager, wl_output *output, bool blend_cursor = false);
+    listen(zwlr_screencopy_manager_v1 *dmabuf_manager, wl_output *output, bool blend_cursor = false);
 
     ~dmabuf_t();
 
     void
     frame(
-      zwlr_export_dmabuf_frame_v1 *frame,
+      zwlr_screencopy_frame_v1 *frame,
       std::uint32_t width, std::uint32_t height,
       std::uint32_t x, std::uint32_t y,
       std::uint32_t buffer_flags, std::uint32_t flags,
@@ -66,7 +66,7 @@ namespace wl {
 
     void
     object(
-      zwlr_export_dmabuf_frame_v1 *frame,
+      zwlr_screencopy_frame_v1 *frame,
       std::uint32_t index,
       std::int32_t fd,
       std::uint32_t size,
@@ -76,12 +76,12 @@ namespace wl {
 
     void
     ready(
-      zwlr_export_dmabuf_frame_v1 *frame,
+      zwlr_screencopy_frame_v1 *frame,
       std::uint32_t tv_sec_hi, std::uint32_t tv_sec_lo, std::uint32_t tv_nsec);
 
     void
     cancel(
-      zwlr_export_dmabuf_frame_v1 *frame,
+      zwlr_screencopy_frame_v1 *frame,
       std::uint32_t reason);
 
     inline frame_t *
@@ -94,7 +94,7 @@ namespace wl {
     std::array<frame_t, 2> frames;
     frame_t *current_frame;
 
-    zwlr_export_dmabuf_frame_v1_listener listener;
+    zwlr_screencopy_frame_v1_listener listener;
   };
 
   class monitor_t {
@@ -155,7 +155,7 @@ namespace wl {
   public:
     enum interface_e {
       XDG_OUTPUT,
-      WLR_EXPORT_DMABUF,
+      WLR_SCREENCOPY,
       MAX_INTERFACES,
     };
 
@@ -174,7 +174,7 @@ namespace wl {
 
     std::vector<std::unique_ptr<monitor_t>> monitors;
 
-    zwlr_export_dmabuf_manager_v1 *dmabuf_manager;
+    zwlr_screencopy_manager_v1 *dmabuf_manager;
     zxdg_output_manager_v1 *output_manager;
 
     bool

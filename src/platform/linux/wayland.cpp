@@ -187,11 +187,11 @@ namespace wl {
 
       this->interface[XDG_OUTPUT] = true;
     }
-    else if (!std::strcmp(interface, zwlr_export_dmabuf_manager_v1_interface.name)) {
+    else if (!std::strcmp(interface, zwlr_screencopy_manager_v1_interface.name)) {
       BOOST_LOG(info) << "Found interface: "sv << interface << '(' << id << ") version "sv << version;
-      dmabuf_manager = (zwlr_export_dmabuf_manager_v1 *) wl_registry_bind(registry, id, &zwlr_export_dmabuf_manager_v1_interface, version);
+      dmabuf_manager = (zwlr_screencopy_manager_v1 *) wl_registry_bind(registry, id, &zwlr_screencopy_manager_v1_interface, version);
 
-      this->interface[WLR_EXPORT_DMABUF] = true;
+      this->interface[WLR_SCREENCOPY] = true;
     }
   }
 
@@ -210,9 +210,9 @@ namespace wl {
   }
 
   void
-  dmabuf_t::listen(zwlr_export_dmabuf_manager_v1 *dmabuf_manager, wl_output *output, bool blend_cursor) {
-    auto frame = zwlr_export_dmabuf_manager_v1_capture_output(dmabuf_manager, blend_cursor, output);
-    zwlr_export_dmabuf_frame_v1_add_listener(frame, &listener, this);
+  dmabuf_t::listen(zwlr_screencopy_manager_v1 *dmabuf_manager, wl_output *output, bool blend_cursor) {
+    auto frame = zwlr_screencopy_manager_v1_capture_output(dmabuf_manager, blend_cursor, output);
+    zwlr_screencopy_frame_v1_add_listener(frame, &listener, this);
 
     status = WAITING;
   }
@@ -225,7 +225,7 @@ namespace wl {
 
   void
   dmabuf_t::frame(
-    zwlr_export_dmabuf_frame_v1 *frame,
+    zwlr_screencopy_frame_v1 *frame,
     std::uint32_t width, std::uint32_t height,
     std::uint32_t x, std::uint32_t y,
     std::uint32_t buffer_flags, std::uint32_t flags,
@@ -242,7 +242,7 @@ namespace wl {
 
   void
   dmabuf_t::object(
-    zwlr_export_dmabuf_frame_v1 *frame,
+    zwlr_screencopy_frame_v1 *frame,
     std::uint32_t index,
     std::int32_t fd,
     std::uint32_t size,
@@ -258,9 +258,9 @@ namespace wl {
 
   void
   dmabuf_t::ready(
-    zwlr_export_dmabuf_frame_v1 *frame,
+    zwlr_screencopy_frame_v1 *frame,
     std::uint32_t tv_sec_hi, std::uint32_t tv_sec_lo, std::uint32_t tv_nsec) {
-    zwlr_export_dmabuf_frame_v1_destroy(frame);
+    zwlr_screencopy_frame_v1_destroy(frame);
 
     current_frame->destroy();
     current_frame = get_next_frame();
@@ -270,9 +270,9 @@ namespace wl {
 
   void
   dmabuf_t::cancel(
-    zwlr_export_dmabuf_frame_v1 *frame,
+    zwlr_screencopy_frame_v1 *frame,
     std::uint32_t reason) {
-    zwlr_export_dmabuf_frame_v1_destroy(frame);
+    zwlr_screencopy_frame_v1_destroy(frame);
 
     auto next_frame = get_next_frame();
     next_frame->destroy();
